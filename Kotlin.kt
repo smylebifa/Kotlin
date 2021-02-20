@@ -203,3 +203,170 @@ fun square(x: Int) :Int = x*x
 
 // Перегрузка функции square...
 fun square(x: Float) = x*x
+
+
+// Lambda function, printing message...
+val msg = { println("Test message") }
+msg()
+
+// Run lambda expression...
+run { println("Second message") }
+
+// Example of getting params from lambdas and sum 2 params in 1 line...
+val sum = {x: Int, y: Int -> println(x + y)}
+sum(5,7)
+
+// More complicated lambda expression for summing.
+// Showing params and it's sum and returning result of summing...
+val sum = {x: Int, y: Int ->
+  val res = x + y
+  println("$x + $y = $res")
+  res
+}
+val a = sum(2,5)
+println("a = $a")
+
+
+// Example of using high order functions...
+val add = {x: Int, y: Int -> x + y}
+val mul = {x: Int, y: Int -> x * y}
+
+action(5,3, add)
+action(45,77,mul)
+action(50,25) { x: Int, y: Int -> x - y }
+
+fun action(n1: Int, n2: Int, operation: (Int,Int) -> Int) {
+  val res = operation(n1, n2)
+  println(res)
+}
+
+
+// Using anonumous functions(preferable lambdas, more laconic)...
+operation(9, 10, fun(x: Int, y: Int): Int = x + y)
+operation(15, 20, fun(x: Int, y: Int): Int {
+  return x * y
+})
+
+fun operation(x:Int, y:Int, op:(Int,Int)->Int){
+    val result = op(x,y)
+    println(result)
+}
+
+
+// Getting key to chose operation and then pass parameters(9 + 4)...
+var action = selectionKey(1)
+println(action(9,4))
+
+fun selectionKey(key: Int): (Int, Int)->Int{
+    when(key){
+        1 -> return {x:Int, y:Int -> x + y}
+        2 -> return {x:Int, y:Int -> x - y}
+        3 -> return {x:Int, y:Int -> x * y}
+        else -> return {x:Int, y:Int -> 0}
+    }
+
+}
+
+
+
+// Example of using class.
+// Use modifier open to extends from other class...
+open class Person {
+  private var name: String = ""
+  private var age: Int = 0
+
+  constructor(_name:String) {
+    name = _name
+  }
+
+  constructor()
+
+  constructor(_name:String, _age:Int): this(_name){
+    age = _age
+  }
+
+  val getName: String get() = name.toUpperCase()
+  val info: String get() = "Name: $name  Age: $age"
+
+  open fun setName(value: String){
+    if(value.length > 2)
+      name = value
+  }
+
+  open fun setAge(value: Int){
+    if((value > 0) and (value < 150))
+      age = value
+  }
+
+  open fun sayMyName(){
+    println("My name is $name")
+  }
+}
+
+
+// Extends class Person...
+class Employee: Person
+{
+  var company: String = ""
+
+  constructor(name:String, comp:String):super(name){
+    company = comp
+  }
+
+  override fun sayMyName(){
+    println("My name is $getName. I work in $company")
+  }
+}
+
+
+fun main(args: Array<String>) {
+  val nick: Person = Person()
+  nick.setName("Nick")
+  println(nick.getName)
+  println(nick.info)
+  nick.setAge(20)
+  println(nick.info)
+
+  val bob: Person = Person("Bob")
+  bob.sayMyName()
+  println(bob.info)
+  bob.setAge(27)
+  println(bob.info)
+  val alice: Person = Person("Alice",19)
+  println(alice.info)
+}
+
+
+// Create interface and using or override methods in other classes...
+interface Movable{
+  fun move()
+  fun stop(){
+    println("Stop")
+  }
+}
+
+class Car: Movable{
+  override fun move() {
+    println("Car is moving")
+  }
+}
+
+class Aircraft: Movable{
+  override fun move() {
+    println("Aircraft is moving")
+  }
+  override fun stop(){
+    println("Landing")
+  }
+}
+
+
+// Create abstract class for implementing and using for other classes...
+abstract class Human(val name:String)
+
+
+// Using enums...
+enum class DayOfWeek{Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday}
+
+val today: DayOfWeek = DayOfWeek.Saturday
+print("Today: $today")
