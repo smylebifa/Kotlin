@@ -1,1 +1,1 @@
-Kotlin syntax
+# Syntax of Kotlin
